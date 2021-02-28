@@ -1,0 +1,76 @@
+<html>
+<head>
+    <title>TASK 4</title>
+<style>
+ table{
+  border-collapse: collapse;
+
+}
+
+ td,  th {
+  padding: 8px;
+}
+
+ tr:nth-child(even){background-color: #f2f2f2;}
+
+ tr:hover {background-color: #ddd;}
+
+ th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+
+</head>
+<body>
+    <script type="text/javascript">
+        function Up() {
+            var file = document.getElementById("fileUp");
+            var r = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+            if (r.test(file.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var read = new FileReader();
+                    read.onload = function (e) {
+                        var t = document.createElement("table");
+                        var rs = e.target.result.split("\n");
+
+                        for (var i = 0; i < rs.length; i++) {
+                        	rs[i]=rs[i].substring(1, rs[i].length - 2);
+                            var cs = rs[i].split("\",\"");
+                            var dd = new Date(0); 
+							dd.setUTCSeconds(cs[0]);
+							if(i>0)
+							{cs[0]=dd;}
+							else
+								{cs[0]="Time in IST"}
+                            if (cs.length > 1) {
+                                var rw = t.insertRow(-1);
+                                for (var j = 0; j < cs.length; j++) {
+                                    var c = rw.insertCell(-1);
+                                    c.innerHTML = cs[j];
+                                }
+                            }
+                        }
+                        var CSV = document.getElementById("CSV");
+                        CSV.innerHTML = "";
+                        CSV.appendChild(t);
+                    }
+                    read.readAsText(file.files[0]);
+                } else {
+                    alert("This browser does not support HTML5.");
+                }
+            } else {
+                alert("Please upload a valid CSV file.");
+            }
+        }
+    </script>
+    <input type="file" id="fileUp"/>
+    <input type="button" id="upload" value="Upload" onclick="Up()" />
+    <hr />
+    <div id="CSV">
+    </div>
+</body>
+</html>
